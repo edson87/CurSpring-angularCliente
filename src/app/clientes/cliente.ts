@@ -3,5 +3,5 @@ export class Cliente {
   nombre: string;
   apellido: string;
   email: string;
-  createdAt: string;
+  createAt: string;
 }
