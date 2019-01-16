@@ -1,5 +1,5 @@
 .footer{
-  position: fixed;
+  position: absolute;
   /*absolute*/
   bottom: 0px;
   height: 60px;
