@@ -24,11 +24,11 @@ export class FormComponent implements OnInit {
   create(): void {
     console.log(this.cliente)
     this.clienteService.create(this.cliente).subscribe(
-      json => {
-        console.log(json);
+      cliente => {
+        console.log(cliente);
         this.router.navigate(['/clientes'])
-        //swal("Nuevo Cliente", `Cliente ${json.cliente.nombre} creado con exito`, 'success')
-        swal("Nuevo Cliente", `${json.mensaje}: ${json.cliente.nombre}`, 'success')
+        swal("Nuevo Cliente", `Cliente ${cliente.nombre} creado con exito`, 'success')
+        //swal("Nuevo Cliente", `${json.mensaje}: ${json.cliente.nombre}`, 'success')
 
       }
     );
