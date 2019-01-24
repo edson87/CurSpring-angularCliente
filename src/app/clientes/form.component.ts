@@ -13,6 +13,7 @@ import swal from 'sweetalert2';
 export class FormComponent implements OnInit {
   private cliente: Cliente = new Cliente;
   private titulo: string = "Crear Cliente";
+  private errores: String[];
 
   constructor(private clienteService: ClienteService, private router: Router, private activateRoute: ActivatedRoute) {
   }
@@ -30,6 +31,11 @@ export class FormComponent implements OnInit {
         swal("Nuevo Cliente", `Cliente ${cliente.nombre} creado con exito`, 'success')
         //swal("Nuevo Cliente", `${json.mensaje}: ${json.cliente.nombre}`, 'success')
 
+      },
+      err => {
+        this.errores = err.error.errors as String[];
+        console.error(err.error.errors)
+        console.error("Codigo del error "+err.status)
       }
     );
   }

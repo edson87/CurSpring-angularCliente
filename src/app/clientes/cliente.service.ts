@@ -6,7 +6,9 @@ import { of, throwError } from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http'
 import { map, catchError } from 'rxjs/operators';
 import swal from 'sweetalert2';
-import { Router } from '@angular/router'
+import { Router } from '@angular/router';
+import { formatDate, DatePipe } from '@angular/common';
+//import localES from '@angular/common/locales/es-BO';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +22,18 @@ export class ClienteService {
     //return of(CLIENTES);
     //return this.http.get<Cliente[]>(this.urlEndPoint);
     return this.http.get(this.urlEndPoint).pipe(
-      map(response => response as Cliente[])
+      map(response => {
+              let clientes = response as Cliente[];
+              return clientes.map( cliente => {
+                  cliente.nombre = cliente.nombre.toUpperCase();
+                  let dataPipe = new DatePipe('es');
+                  cliente.createAt = dataPipe.transform(cliente.createAt, 'EEEE dd, MMMM yyyy');
+                  return cliente;
+                }
+              )
+          }
+      )
+
       //return this.http.get(this.urlEndPoint).pipe(
        // map(function (response) {
        //   return response as Cliente[]
@@ -33,6 +46,11 @@ export class ClienteService {
     return this.http.post<Cliente>(this.urlEndPoint,cliente,{headers: this.httpHeaders}).pipe(
       map( (response: any) => response.cliente as Cliente),
       catchError(e =>{
+
+        if (e.status == 400){
+          console.log("error 400")
+          return throwError (e);
+        }
         console.log(e.error.mensaje);
         swal(e.error.mensaje,e.error.error,'error');
         return throwError(e);
