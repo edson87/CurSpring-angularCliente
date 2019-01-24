@@ -1,0 +1,20 @@
+<!--<ul *ngIf="paginas?.length > 0" >
+  <li *ngFor="let pagina of paginas" style="display: inline;" class="m-3">
+    <a [routerLink]="['/clientes/page/',pagina-1]">
+      {{pagina}}
+    </a>
+  </li>
+</ul>-->
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination" *ngIf="paginas?.length > 0">
+    <li class="page-item"><a class="page-link" [routerLink]="['/clientes/page/',inicio]">Previous</a></li>
+    <li *ngFor="let pagina of paginas" class="page-item">
+      <nav *ngIf="pagina-1 == paginador.number" class="page-link">{{pagina}}</nav>
+      <a *ngIf="pagina-1 != paginador.number" class="page-link"[routerLink]="['/clientes/page/',pagina-1]">
+        {{pagina}}
+      </a>
+    </li>
+    <li class="page-item"><a class="page-link" [routerLink]="['/clientes/page/',fin]">Next</a></li>
+  </ul>
+</nav>

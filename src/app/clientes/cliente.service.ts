@@ -4,10 +4,11 @@ import { Cliente } from './cliente'
 import { Observable } from 'rxjs';
 import { of, throwError } from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http'
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, tap } from 'rxjs/operators';
 import swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { formatDate, DatePipe } from '@angular/common';
+import {forEach} from "@angular/router/src/utils/collection";
 //import localES from '@angular/common/locales/es-BO';
 
 @Injectable({
@@ -18,21 +19,34 @@ export class ClienteService {
   private httpHeaders = new HttpHeaders({'Content-Type': 'application/json'})
   constructor(private http: HttpClient, private router: Router) { }
 
-  getClientes(): Observable<Cliente[]>{
+  getClientes(page: number): Observable<any>{
     //return of(CLIENTES);
     //return this.http.get<Cliente[]>(this.urlEndPoint);
-    return this.http.get(this.urlEndPoint).pipe(
-      map(response => {
-              let clientes = response as Cliente[];
-              return clientes.map( cliente => {
+    return this.http.get(this.urlEndPoint+'/page/'+page).pipe(
+      tap( (response: any) =>{
+          //console.log("Recorrido Uno");
+          (response.content as Cliente[]).forEach(cliente =>{
+           // return console.log(cliente.nombre);
+          })
+        }
+      ),
+      map((response: any) => {
+                  (response.content as Cliente[]).map( cliente => {
                   cliente.nombre = cliente.nombre.toUpperCase();
                   let dataPipe = new DatePipe('es');
                   cliente.createAt = dataPipe.transform(cliente.createAt, 'EEEE dd, MMMM yyyy');
                   return cliente;
-                }
-              )
+                });
+            return response;
           }
-      )
+      ),
+      tap((response: any) =>{
+
+          //console.log("Recorrido dos");
+        (response.content as Cliente[]).forEach(cliente =>{
+            //console.log(cliente.nombre)
+          })
+      })
 
       //return this.http.get(this.urlEndPoint).pipe(
        // map(function (response) {

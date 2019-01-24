@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Cliente } from './cliente';
 
 import { ClienteService } from './cliente.service';
@@ -13,13 +13,22 @@ import {Router, ActivatedRoute} from '@angular/router';
 })
 export class ClientesComponent implements OnInit {
   clientes: Cliente[];
+  public paginador: any;
 
-  constructor(private clienteService: ClienteService, private router: Router) { }
+  constructor(private clienteService: ClienteService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
-    this.clienteService.getClientes().subscribe(
-      (clientes) => this.clientes = clientes
-    );
+      this.activatedRoute.paramMap.subscribe(params => {
+        let page: number = +params.get('page');
+        if (!page){
+          page = 0;
+        }
+        this.clienteService.getClientes(page)
+          .subscribe((response) => {
+              this.clientes = response.content as Cliente[];
+              this.paginador = response
+           });
+      });
   }
 
   delete(cliente): void{
