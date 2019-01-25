@@ -8,13 +8,31 @@
 
 <nav aria-label="Page navigation example">
   <ul class="pagination" *ngIf="paginas?.length > 0">
-    <li class="page-item"><a class="page-link" [routerLink]="['/clientes/page/',inicio]">Previous</a></li>
-    <li *ngFor="let pagina of paginas" class="page-item">
-      <nav *ngIf="pagina-1 == paginador.number" class="page-link">{{pagina}}</nav>
-      <a *ngIf="pagina-1 != paginador.number" class="page-link"[routerLink]="['/clientes/page/',pagina-1]">
-        {{pagina}}
+    <li class="page-item">
+      <a class="page-link" [routerLink]="['/clientes/page/',inicio]">
+        Inicio
       </a>
     </li>
-    <li class="page-item"><a class="page-link" [routerLink]="['/clientes/page/',fin]">Next</a></li>
+    <li *ngIf="paginador.number != 0" class="page-item">
+      <a class="page-link" [routerLink]="['/clientes/page/',paginador.number-1]">
+       «
+      </a>
+    </li>
+    <li *ngFor="let pagina of paginas" class="page-item" [ngClass]="(pagina-1 == paginador.number)? 'active':'' ">
+      <nav *ngIf="pagina-1 == paginador.number" class="page-link">{{pagina}}</nav>
+      <a *ngIf="pagina-1 != paginador.number" class="page-link"[routerLink]="['/clientes/page/',pagina-1]" activa>
+        {{pagina}}
+      </a>
+    </li >
+    <li class="page-item" *ngIf="paginador.number < paginador.totalPages-1">
+      <a class="page-link" [routerLink]="['/clientes/page/',paginador.number+1]">
+       »
+      </a>
+    </li>
+    <li class="page-item" >
+      <a class="page-link" [routerLink]="['/clientes/page/',fin]">
+        Fin
+      </a>
+    </li>
   </ul>
 </nav>
