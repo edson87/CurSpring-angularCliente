@@ -51,6 +51,14 @@
           </div>
         </div>
       </div>
+
+      <div class="form-group row">
+        <label for="createAt" class="col-form-label col-sm-2">Fecha Creacion</label>
+        <div class="col-sm-6">
+          <input  type="date" class="form-group" [(ngModel)]="cliente.createAt" name="createAt" ><!-- required minlength="2" -->
+        </div>
+      </div>
+
       <div>
         <button *ngIf="!cliente.id else elseBlock " class="btn btn-primary" role="button" (click)="create()" [disabled]="!clienteForm.form.valid">Crear</button>
 
